@@ -1,0 +1,14 @@
+p {
+    text-align: center;
+}
+
+div#centered {
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+svg {
+    background-color: beige;
+}
