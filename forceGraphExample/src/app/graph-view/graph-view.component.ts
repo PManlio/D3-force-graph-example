@@ -52,7 +52,7 @@ export class GraphViewComponent implements OnInit, AfterViewInit {
     this.simulation = d3.forceSimulation()
       .force("link", d3.forceLink().id(d => { return d["nome"]; }))
       .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("center", d3.forceCenter((width - 100) / 2, (height - 100) / 2))
 
     // funzione implementata verso la fine:
     this.render(this.myData)

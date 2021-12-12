@@ -1,4 +1,16 @@
 <div style="margin: auto;">
     <h1 style="text-align: center;">Testing Graphs</h1>
-    <app-graph-view></app-graph-view>
+    <button class="card" style="margin: auto;" (click)="onSwitch()">Switch tra Tabella e Grafi</button>
+
+    <p style="margin-top: 2vh; margin-bottom: 2vh;">Semplice esempio</p>
+
+    <div *ngIf="switch; then graph else table"></div>
+
+    <ng-template #graph>
+        <app-graph-view></app-graph-view>
+    </ng-template>
+    
+    <ng-template #table>
+        <app-table-view></app-table-view>
+    </ng-template>
 </div>

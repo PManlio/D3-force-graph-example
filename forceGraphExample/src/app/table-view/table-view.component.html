@@ -1,0 +1,12 @@
+<div class="myTable">
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Cognome</th>
+        </tr>
+        <tr *ngFor="let row of data.nodes">
+            <td>{{ row.nome }}</td>
+            <td>{{ row.cognome }}</td>
+        </tr>
+    </table>
+</div>
