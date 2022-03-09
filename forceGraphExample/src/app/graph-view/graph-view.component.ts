@@ -19,6 +19,11 @@ import { Grafo } from '../interfaces/grafo';
  *    useful_youtube: https://www.youtube.com/watch?v=y2-sgZh49dQ&ab_channel=AndrewChen, https://www.youtube.com/watch?v=1vHjMxe-4kI&t=659s&ab_channel=AndrewChen
  *    
  *    template: https://stackoverflow.com/questions/41870684/d3-js-force-graph-with-type-script-and-angular2
+ * 
+ *    la versione di d3 che si usa è la 5, ma in giro ci sono tante guide sulla versione 3; ecco le differenze: https://observablehq.com/@d3/d3v6-migration-guide
+ *    la più importante è che () => d3.event.d3Func() diventa (event) => event.d3Func()
+ * 
+ *    guida sullo zoom: https://www.d3indepth.com/zoom-and-pan/
  * }
  */
 export class GraphViewComponent implements OnInit, AfterViewInit {
@@ -37,6 +42,8 @@ export class GraphViewComponent implements OnInit, AfterViewInit {
 
   private text;
 
+  private zoom;
+
   constructor(private dataService: GraphqueriesService) {
     this.myData = dataService.getData()
   }
@@ -49,6 +56,23 @@ export class GraphViewComponent implements OnInit, AfterViewInit {
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
+    this.zoom = d3.zoom().on('zoom', this.zoomHandler);
+    // this.svg.call(this.zoom);
+    // this.zoom = d3.zoom().on('zoom', (event) => {
+    //   this.svg.attr("transform", event.transform)
+    // });
+    // this.svg.call(this.zoom);
+    // this.zoom = d3.zoom().on("zoom", (event) => {
+    //   this.svg/* .append("g") */.attr("class", "minnesota").attr("transform", event.transform)
+    // });
+    // // this.zoom(this.svg)
+    // this.svg.call(this.zoom)
+    //-----------------------------------------------------------------------------------
+    // this.svg.call(d3.zoom().on("zoom", (event) => {
+    //   console.log("sto rescalando?");
+    //   event.transform.rescaleX(d3.scaleLinear().range([0, 500]).copy())
+    // }))
+    //-----------------------------------------------------------------------------------
     this.simulation = d3.forceSimulation()
       .force("link", d3.forceLink().id(d => { return d["nome"]; }))
       .force("charge", d3.forceManyBody())
@@ -73,6 +97,7 @@ export class GraphViewComponent implements OnInit, AfterViewInit {
     this.text
       .attr("x", d => d.x)
       .attr("y", d => d.y)
+
   }
 
   // render del grafico
@@ -108,6 +133,13 @@ export class GraphViewComponent implements OnInit, AfterViewInit {
 
     this.simulation.force("link")
       .links(graph.links);
+
+    d3.select('svg').call(this.zoom)
+    // this.zoom = d3.zoom();
+    // this.zoom.on("zoom", () => {
+    //   this.svg.append("g").attr("transform", d3.zoomTransform)
+    // });
+    // this.zoom(this.svg);
   }
 
   dragged(event) {
@@ -127,5 +159,10 @@ export class GraphViewComponent implements OnInit, AfterViewInit {
     event.subject.fy = event.y;
   }
 
+  zoomHandler(event) {
+    console.log("sto rescalando?");
+    d3.selectAll('g')
+    .attr('transform', event.transform)
+  }
 
 }
